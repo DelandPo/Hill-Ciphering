@@ -37,7 +37,7 @@ y = np.array(a).reshape(keySize,keySize)
 b = input().split()
 if len(b)% keySize != 0 :
     for i in range(0,keySize - len(b)% keySize):
-        b.append('#')
+        b.append('K')
 i = 0
 cipheredText = ""
 while keySize <= len(b):
@@ -46,7 +46,18 @@ while keySize <= len(b):
     i = keySize
     keySize = keySize + nValue 
 print(cipheredText)
- 
+print(y)
+keyInverse = np.linalg.inv(y)
+print(keyInverse)
+keySize = nValue
+j = 0
+decipheredText = ""
+while keySize <= len(keyInverse):
+    c = charArray(b[j:keySize])
+    decipheredText = decipheredText + convertingString(c,nValue,keyInverse)
+    j = keySize
+    keySize = keySize + nValue 
+print(decipheredText)
 
 
 
