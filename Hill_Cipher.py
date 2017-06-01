@@ -5,7 +5,7 @@ def convertingString(b,keySize,y):
     plainText = np.array(b).reshape(keySize,1)
     finalResult = np.matmul(y,plainText)
     for x in np.nditer(finalResult):
-        a = x%26
+        a = int(x%26)
         encryptedString += d[a]
     return encryptedString
 def extended_gcd(aa, bb):
@@ -56,7 +56,7 @@ if len(b)% keySize != 0 :
     for i in range(0,keySize - len(b)% keySize):
         b.append('K')
 i = 0
-cipheredText = ""
+cipheredText = ''
 while keySize <= len(b):
     c = charArray(b[i:keySize])
     cipheredText = cipheredText + convertingString(c,nValue,y)
@@ -67,21 +67,32 @@ print(y)
 ## Decryption Part
 keyDeterminant = np.linalg.det(y)
 print(keyDeterminant)
-ax = matrix_cofactor(y)
-
-print(b)
+ax = np.transpose(matrix_cofactor(y))
 a = modinv(int(keyDeterminant),26)
-b = np.array(ax).reshape(2,2)
-print(3 * b)
+ax = a * ax
+keySize = nValue
+for x in range(0,keySize):
+    for y in range(0,keySize):
+        ax[x,y] = ax[x,y]%26
 
+print(ax)
 keySize = nValue
 j = 0
+print(len(ax))
+print(nValue)
 decipheredText = ""
-while keySize <= len(keyInverse):
-    c = charArray(b[j:keySize])
-    decipheredText = decipheredText + convertingString(c,nValue,keyInverse)
+print("Entering the loop")
+while keySize <= 4:
+    print(j)
+    print(keySize)
+    print(nValue)
+    c = charArray(cipheredText[j:keySize])
+    print(c)
+    decipheredText = decipheredText + convertingString(c,nValue,ax)
+    print(decipheredText)
     j = keySize
     keySize = keySize + nValue 
-print(decipheredText)
+    print("Loop Finished")
+
 
 
