@@ -8,6 +8,23 @@ def convertingString(b,keySize,y):
         a = x%26
         encryptedString += d[a]
     return encryptedString
+def extended_gcd(aa, bb):
+    lastremainder, remainder = abs(aa), abs(bb)
+    x, lastx, y, lasty = 0, 1, 1, 0
+    while remainder:
+        lastremainder, (quotient, remainder) = remainder, divmod(lastremainder, remainder)
+        x, lastx = lastx - quotient*x, x
+        y, lasty = lasty - quotient*y, y
+    return lastremainder, lastx * (-1 if aa < 0 else 1), lasty * (-1 if bb < 0 else 1)
+ 
+def modinv(a, m):
+    g, x, y = extended_gcd(a, m)
+    if g != 1:
+        raise ValueError
+    return x % m
+
+def matrix_cofactor(matrix):
+    return np.linalg.inv(matrix).T * np.linalg.det(matrix)
 
 def charArray(j):
     list1 = []
@@ -47,8 +64,16 @@ while keySize <= len(b):
     keySize = keySize + nValue 
 print(cipheredText)
 print(y)
-keyInverse = np.linalg.inv(y)
-print(keyInverse)
+## Decryption Part
+keyDeterminant = np.linalg.det(y)
+print(keyDeterminant)
+ax = matrix_cofactor(y)
+
+print(b)
+a = modinv(int(keyDeterminant),26)
+b = np.array(ax).reshape(2,2)
+print(3 * b)
+
 keySize = nValue
 j = 0
 decipheredText = ""
@@ -58,6 +83,5 @@ while keySize <= len(keyInverse):
     j = keySize
     keySize = keySize + nValue 
 print(decipheredText)
-
 
 
